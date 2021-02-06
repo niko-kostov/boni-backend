@@ -1,4 +1,4 @@
-package com.project.boni.model.DTO;
+package com.project.boni.model.dto;
 
 import com.project.boni.model.Item;
 import com.project.boni.model.ItemPrice;
@@ -11,5 +11,5 @@ public class ItemWithPriceDTO {
 
     private Item item;
 
-    private List<ItemPrice> itemPrice;
+    private List<ItemPriceDTO> itemPrice;
 }

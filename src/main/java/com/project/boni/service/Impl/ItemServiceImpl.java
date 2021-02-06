@@ -1,6 +1,7 @@
 package com.project.boni.service.Impl;
 
-import com.project.boni.model.DTO.ItemWithPriceDTO;
+import com.project.boni.model.dto.ItemPriceDTO;
+import com.project.boni.model.dto.ItemWithPriceDTO;
 import com.project.boni.model.Item;
 import com.project.boni.model.ItemPrice;
 import com.project.boni.model.exceptions.ItemNotFoundException;
@@ -47,21 +48,25 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemWithPriceDTO> findAllWithPrices() {
-        List<ItemWithPriceDTO> itemWithPricesList = new ArrayList<>();
         List<Item> itemList = this.itemRepository.findAll();
-        List<ItemPrice> itemPriceList = this.itemPriceRepository.findAll();
+        List<ItemPrice> priceList = this.itemPriceRepository.findAll();
+        List<ItemWithPriceDTO> itemWithPriceDTOList = new ArrayList<>();
 
         for (Item item : itemList){
-           ItemWithPriceDTO itemWithPriceDTO = new ItemWithPriceDTO();
-           itemWithPriceDTO.setItem(item);
-           List<ItemPrice> itemPrices = itemPriceList.stream()
-                   .filter(ipl -> ipl.getItem().getId().equals(item.getId())).collect(Collectors.toList());
-           itemWithPriceDTO.setItemPrice(itemPrices);
+            ItemWithPriceDTO itemWithPriceDTO = new ItemWithPriceDTO();
+            itemWithPriceDTO.setItem(item);
+            List<ItemPrice> pricesForItem = priceList.stream()
+                    .filter(itemPrice -> itemPrice.getItem().getId().equals(item.getId())).collect(Collectors.toList());
+            List<ItemPriceDTO> pricesForItemDTO = new ArrayList<>();
 
-           itemWithPricesList.add(itemWithPriceDTO);
+            for(ItemPrice itemPrice : pricesForItem){
+                pricesForItemDTO.add(new ItemPriceDTO(itemPrice.getSize(), itemPrice.getPrice()));
+            }
+
+            itemWithPriceDTO.setItemPrice(pricesForItemDTO);
+            itemWithPriceDTOList.add(itemWithPriceDTO);
         }
-
-        return itemWithPricesList;
+        return itemWithPriceDTOList;
     }
 
 }

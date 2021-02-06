@@ -1,6 +1,6 @@
 package com.project.boni.service;
 
-import com.project.boni.model.DTO.ItemWithPriceDTO;
+import com.project.boni.model.dto.ItemWithPriceDTO;
 import com.project.boni.model.Item;
 
 import java.util.List;

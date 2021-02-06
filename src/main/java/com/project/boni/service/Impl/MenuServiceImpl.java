@@ -6,6 +6,8 @@ import com.project.boni.repository.MenuRepository;
 import com.project.boni.service.MenuService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MenuServiceImpl implements MenuService {
     private final MenuRepository menuRepository;
@@ -29,5 +31,10 @@ public class MenuServiceImpl implements MenuService {
         Menu deletedMenu = this.menuRepository.findById(id).orElseThrow(() -> new MenuNotFoundException(id));
         this.menuRepository.deleteById(id);
         return deletedMenu;
+    }
+
+    @Override
+    public List<Menu> findAll() {
+        return this.menuRepository.findAll();
     }
 }
