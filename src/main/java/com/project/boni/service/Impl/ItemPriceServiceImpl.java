@@ -4,9 +4,11 @@ import com.project.boni.model.ItemPrice;
 import com.project.boni.model.exceptions.ItemPriceNotFoundException;
 import com.project.boni.repository.ItemPriceRepository;
 import com.project.boni.service.ItemPriceService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ItemPriceServiceImpl implements ItemPriceService {
     private final ItemPriceRepository itemPriceRepository;
 
