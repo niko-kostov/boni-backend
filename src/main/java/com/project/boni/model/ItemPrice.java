@@ -22,5 +22,4 @@ public class ItemPrice extends BaseEntity<Long> {
     @JoinColumn(name = "item_id")
     private Item item;
 
-
 }
