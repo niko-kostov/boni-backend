@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Entity
 @Data
@@ -35,6 +36,9 @@ public class User {
     @Column(name = "is_deleted")
     private boolean deleted;
 
+    @ManyToOne
+    private Role role;
+
     @Lob
     @Column(name = "user_image")
     private byte[] profileImage;
@@ -45,4 +49,10 @@ public class User {
     @Column(name = "created_at")
     @CreatedDate
     private ZonedDateTime created_at;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Address> addresses;
+
+    @OneToMany(mappedBy = "user")
+    private Set<ShoppingCart> shoppingCarts;
 }
