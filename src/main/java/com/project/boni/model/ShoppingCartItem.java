@@ -7,11 +7,11 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "shopping_cart_items")
-public class ShoppingCartItems {
+public class ShoppingCartItem {
 
     @EmbeddedId
     @Column(name = "shopping_cart_items_id")
-    private ShoppingCartItemsKey id;
+    private ShoppingCartItemKey id;
 
     @ManyToOne
     @MapsId("shoppingCartId")
