@@ -46,22 +46,19 @@ public class ItemServiceImpl implements ItemService {
         return this.itemRepository.save(item);
     }
 
+    // Connect Item with all his available prices
     @Override
     public List<ItemWithPriceDTO> findAllWithPrices() {
         List<Item> itemList = this.itemRepository.findAll();
-        List<ItemPrice> priceList = this.itemPriceRepository.findAll();
         List<ItemWithPriceDTO> itemWithPriceDTOList = new ArrayList<>();
 
         for (Item item : itemList){
             ItemWithPriceDTO itemWithPriceDTO = new ItemWithPriceDTO();
             itemWithPriceDTO.setItem(item);
-            List<ItemPrice> pricesForItem = priceList.stream()
-                    .filter(itemPrice -> itemPrice.getItem().getId().equals(item.getId())).collect(Collectors.toList());
             List<ItemPriceDTO> pricesForItemDTO = new ArrayList<>();
 
-            for(ItemPrice itemPrice : pricesForItem){
-                pricesForItemDTO.add(new ItemPriceDTO(itemPrice.getSize(), itemPrice.getPrice()));
-            }
+            item.getItemPrices()
+                    .forEach(itemPrice -> pricesForItemDTO.add(new ItemPriceDTO(itemPrice.getSize(), itemPrice.getPrice())));
 
             itemWithPriceDTO.setItemPrice(pricesForItemDTO);
             itemWithPriceDTOList.add(itemWithPriceDTO);
