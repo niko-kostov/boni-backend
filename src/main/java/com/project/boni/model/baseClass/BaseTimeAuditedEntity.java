@@ -11,7 +11,7 @@ public abstract class BaseTimeAuditedEntity<U, T> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @CreatedDate
     @Column(name = "create_date")

@@ -13,6 +13,6 @@ public abstract class BaseEntity<U> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
 }
