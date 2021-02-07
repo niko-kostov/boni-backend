@@ -1,7 +1,7 @@
 package com.project.boni.service;
 
-import com.project.boni.model.dto.ItemWithPriceDTO;
 import com.project.boni.model.Item;
+import com.project.boni.model.dto.ItemWithPriceDto;
 
 import java.util.List;
 
@@ -14,5 +14,5 @@ public interface ItemService {
 
     Item save(Item item);
 
-    List<ItemWithPriceDTO> findAllWithPrices();
+    List<ItemWithPriceDto> findAllItemsWithPrice();
 }

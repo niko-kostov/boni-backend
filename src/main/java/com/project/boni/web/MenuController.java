@@ -1,7 +1,6 @@
 package com.project.boni.web;
 
 import com.project.boni.model.Menu;
-import com.project.boni.model.exceptions.MenuNotExistException;
 import com.project.boni.service.MenuService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,7 +19,7 @@ public class MenuController {
     }
 
     @GetMapping
-    public Menu findMenu(){
-        return this.menuService.findAll().stream().findFirst().orElseThrow(MenuNotExistException::new);
+    public Menu getMenu(){
+        return this.menuService.findFirst();
     }
 }

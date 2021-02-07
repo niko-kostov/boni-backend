@@ -1,7 +1,11 @@
 package com.project.boni.service.Impl;
 
 import com.project.boni.model.Menu;
+import com.project.boni.model.exceptions.MenuNotExistException;
 import com.project.boni.model.exceptions.MenuNotFoundException;
+import com.project.boni.repository.CategoryRepository;
+import com.project.boni.repository.ItemPriceRepository;
+import com.project.boni.repository.ItemRepository;
 import com.project.boni.repository.MenuRepository;
 import com.project.boni.service.MenuService;
 import org.springframework.stereotype.Service;
@@ -36,5 +40,10 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Menu> findAll() {
         return this.menuRepository.findAll();
+    }
+
+    @Override
+    public Menu findFirst() {
+        return this.menuRepository.findAll().stream().findFirst().orElseThrow(MenuNotExistException::new);
     }
 }

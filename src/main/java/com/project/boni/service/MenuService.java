@@ -12,4 +12,6 @@ public interface MenuService {
     Menu deleteById(Long id);
 
     List<Menu> findAll();
+
+    Menu findFirst();
 }
