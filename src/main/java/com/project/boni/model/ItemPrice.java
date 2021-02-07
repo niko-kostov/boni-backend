@@ -3,7 +3,9 @@ package com.project.boni.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.boni.model.baseClass.BaseEntity;
 import com.project.boni.model.enums.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,6 +13,8 @@ import java.util.Objects;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "item_price")
 public class ItemPrice extends BaseEntity<Long> implements Serializable {
 
