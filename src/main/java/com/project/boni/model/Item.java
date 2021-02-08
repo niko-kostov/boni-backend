@@ -3,6 +3,7 @@ package com.project.boni.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.boni.model.baseClass.BaseEntity;
 import lombok.Data;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,6 +20,7 @@ public class Item extends BaseEntity<Long> implements Serializable {
     private String name;
 
     @Lob
+    @Type(type = "org.hibernate.type.ImageType")
     @Column(name = "item_image")
     private byte[] itemImage;
 
