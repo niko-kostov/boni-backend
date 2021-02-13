@@ -5,14 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetShoppingCartDto implements Serializable {
+public class PayShoppingCartDto implements Serializable {
 
     private Long shoppingCartId;
-
-    List<ShoppingCartItemDto> shoppingCartItemDtoList;
 }

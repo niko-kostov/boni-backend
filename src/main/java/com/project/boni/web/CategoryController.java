@@ -17,17 +17,17 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @PostMapping("/admin/edit")
+    @PatchMapping("/admin")
     public Category editCategory (@RequestBody EditCategoryDto editCategoryDto){
         return this.categoryService.edit(editCategoryDto);
     }
 
-    @PostMapping("/admin/add")
+    @PostMapping("/admin")
     public Category addCategory (@RequestBody SaveCategoryDto saveCategoryDto){
         return this.categoryService.saveFromDto(saveCategoryDto);
     }
 
-    @DeleteMapping("/admin/delete/{id}")
+    @DeleteMapping("/admin/{id}")
     public Category deleteCategory(@PathVariable Long id){
         return this.categoryService.deleteById(id);
     }

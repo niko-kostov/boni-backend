@@ -1,6 +1,10 @@
 package com.project.boni.web;
 
+import com.project.boni.model.ShoppingCart;
+import com.project.boni.model.ShoppingCartItem;
+import com.project.boni.model.dto.AddItemToCartDto;
 import com.project.boni.model.dto.GetShoppingCartDto;
+import com.project.boni.model.dto.PayShoppingCartDto;
 import com.project.boni.service.ShoppingCartService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +19,18 @@ public class ShoppingCartController {
         this.shoppingCartService = shoppingCartService;
     }
 
-    @GetMapping("/get/{email}")
+    @GetMapping("/user/{email}")
     public GetShoppingCartDto getShoppingCartForUser(@PathVariable String email){
         return this.shoppingCartService.getActiveShoppingCart(email);
+    }
+
+    @PostMapping("/user")
+    public ShoppingCartItem addItemToCart(@RequestBody AddItemToCartDto addItemToCartDto){
+        return this.shoppingCartService.addItemToCart(addItemToCartDto);
+    }
+
+    @PatchMapping("/user/pay")
+    public ShoppingCart payShoppingCart(@RequestBody PayShoppingCartDto payShoppingCartDto){
+        return this.shoppingCartService.payShoppingCart(payShoppingCartDto);
     }
 }

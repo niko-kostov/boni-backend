@@ -4,6 +4,7 @@ import com.project.boni.model.baseClass.BaseTimeAuditedEntity;
 import lombok.Data;
 import lombok.extern.java.Log;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Entity
 @Data
 @Table(name = "boni_user")
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id

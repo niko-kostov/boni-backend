@@ -1,6 +1,7 @@
 package com.project.boni.service.Impl;
 
 import com.project.boni.model.Category;
+import com.project.boni.model.Item;
 import com.project.boni.model.Menu;
 import com.project.boni.model.dto.EditCategoryDto;
 import com.project.boni.model.dto.SaveCategoryDto;
@@ -13,6 +14,8 @@ import com.project.boni.repository.MenuRepository;
 import com.project.boni.service.CategoryService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -65,6 +68,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = new Category();
         Menu menu = this.menuRepository.findAll().stream().findFirst().orElseThrow(MenuNotExistException::new);
         category.setName(saveCategoryDto.getName());
+        category.setItems(new HashSet<>());
         category.setMenu(menu);
         return this.categoryRepository.save(category);
     }

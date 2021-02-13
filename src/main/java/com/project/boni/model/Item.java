@@ -1,6 +1,6 @@
 package com.project.boni.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import com.project.boni.model.baseClass.BaseEntity;
 import lombok.Data;
 import org.hibernate.annotations.Type;
@@ -20,7 +20,7 @@ public class Item extends BaseEntity<Long> implements Serializable {
     private String name;
 
     @Lob
-    @Type(type = "org.hibernate.type.ImageType")
+    //@Type(type = "org.hibernate.type.ImageType")
     @Column(name = "item_image")
     private byte[] itemImage;
 
@@ -32,7 +32,7 @@ public class Item extends BaseEntity<Long> implements Serializable {
     @JsonIgnore
     private Category category;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER)
     private Set<ItemPrice> itemPrices;
 
     @Override

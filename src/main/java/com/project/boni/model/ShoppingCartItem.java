@@ -1,13 +1,16 @@
 package com.project.boni.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
 
 @Data
 @Entity
 @Table(name = "shopping_cart_items")
-public class ShoppingCartItem {
+public class ShoppingCartItem implements Serializable {
 
     @EmbeddedId
     @Column(name = "shopping_cart_items_id")
@@ -16,6 +19,7 @@ public class ShoppingCartItem {
     @ManyToOne
     @MapsId("shoppingCartId")
     @JoinColumn(name = "shopping_cart_id")
+    @JsonIgnore
     private ShoppingCart shoppingCart;
 
     @ManyToOne
@@ -25,4 +29,18 @@ public class ShoppingCartItem {
 
     @Column(name = "quantity")
     private Integer quantity;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShoppingCartItem that = (ShoppingCartItem) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(quantity, that.quantity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, quantity);
+    }
 }

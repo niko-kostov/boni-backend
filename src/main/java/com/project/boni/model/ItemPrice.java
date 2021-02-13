@@ -1,6 +1,6 @@
 package com.project.boni.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import com.project.boni.model.baseClass.BaseEntity;
 import com.project.boni.model.enums.Size;
 import lombok.AllArgsConstructor;

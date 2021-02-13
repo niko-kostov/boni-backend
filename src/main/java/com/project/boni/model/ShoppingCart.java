@@ -1,5 +1,6 @@
 package com.project.boni.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.boni.model.baseClass.BaseTimeAuditedEntity;
 import com.project.boni.model.enums.ShoppingCartStatus;
 import lombok.Data;
@@ -19,5 +20,6 @@ public class ShoppingCart extends BaseTimeAuditedEntity<Long, ZonedDateTime> imp
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 }

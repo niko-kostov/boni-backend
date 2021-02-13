@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.boni.model.baseClass.BaseTimeAuditedEntity;
 import com.project.boni.model.enums.ERole;
 import lombok.Data;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "role")
+@EntityListeners(AuditingEntityListener.class)
 public class Role extends BaseTimeAuditedEntity<Long, ZonedDateTime> implements Serializable {
 
     @Enumerated(value = EnumType.STRING)

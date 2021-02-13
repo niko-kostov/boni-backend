@@ -18,17 +18,17 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @DeleteMapping("/admin/delete/{id}")
+    @DeleteMapping("/admin/{id}")
     public Item deleteItem(@PathVariable Long id){
         return this.itemService.deleteById(id);
     }
 
-    @PostMapping("/admin/edit")
+    @PatchMapping("/admin")
     public Item editItem(@RequestBody EditItemDto editItemDto){
         return this.itemService.edit(editItemDto);
     }
 
-    @PostMapping("/admin/add")
+    @PostMapping("/admin")
     public Item addItem(@RequestBody SaveItemDto saveItemDto){
         return this.itemService.saveItemFromDto(saveItemDto);
     }
