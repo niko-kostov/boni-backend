@@ -9,6 +9,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -57,4 +59,19 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<ShoppingCart> shoppingCarts;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return active == user.active && deleted == user.deleted && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(firstname, user.firstname) && Objects.equals(lastname, user.lastname) && Objects.equals(role, user.role) && Arrays.equals(profileImage, user.profileImage) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(created_at, user.created_at);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(email, password, firstname, lastname, active, deleted, role, phoneNumber, created_at);
+        result = 31 * result + Arrays.hashCode(profileImage);
+        return result;
+    }
 }

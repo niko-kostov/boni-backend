@@ -24,10 +24,10 @@ public class ShoppingCartController {
         return this.shoppingCartService.getActiveShoppingCart(email);
     }
 
-    @PostMapping("/user")
+/*    @PostMapping("/user")
     public ShoppingCartItem addItemToCart(@RequestBody AddItemToCartDto addItemToCartDto){
         return this.shoppingCartService.addItemToCart(addItemToCartDto);
-    }
+    }*/
 
     @PatchMapping("/user/pay")
     public ShoppingCart payShoppingCart(@RequestBody PayShoppingCartDto payShoppingCartDto){

@@ -1,7 +1,10 @@
 package com.project.boni.web;
 
+import com.project.boni.model.ShoppingCart;
 import com.project.boni.model.ShoppingCartItem;
+import com.project.boni.model.dto.AddItemToCartDto;
 import com.project.boni.model.dto.IncreaseShoppingCartItemQuantityDto;
+import com.project.boni.model.dto.PayShoppingCartDto;
 import com.project.boni.service.ShoppingCartItemService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -24,5 +27,10 @@ public class ShoppingCartItemController {
     @DeleteMapping("/user/shoppingCart/{shoppingCartId}/itemPrice/{itemPriceId}")
     public ShoppingCartItem deleteItemFromCart(@PathVariable Long shoppingCartId, @PathVariable Long itemPriceId){
         return this.shoppingCartItemService.deleteItemFromCart(shoppingCartId, itemPriceId);
+    }
+
+    @PostMapping("/user")
+    public ShoppingCartItem addItemToCart(@RequestBody AddItemToCartDto addItemToCartDto){
+        return this.shoppingCartItemService.addItemToCart(addItemToCartDto);
     }
 }

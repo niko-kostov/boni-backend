@@ -11,11 +11,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class AddItemToCartDto implements Serializable {
 
+    private Long shoppingCartId;
+
     private Long itemId;
 
     private Long itemPriceId;
-
-    private String email;
 
     private Integer quantity;
 

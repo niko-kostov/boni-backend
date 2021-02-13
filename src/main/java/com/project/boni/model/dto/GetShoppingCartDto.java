@@ -3,6 +3,7 @@ package com.project.boni.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,5 +15,5 @@ public class GetShoppingCartDto implements Serializable {
 
     private Long shoppingCartId;
 
-    List<ShoppingCartItemDto> shoppingCartItemDtoList;
+    private List<ShoppingCartItemDto> shoppingCartItemDtoList;
 }

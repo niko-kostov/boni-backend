@@ -8,6 +8,8 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -22,4 +24,21 @@ public class ShoppingCart extends BaseTimeAuditedEntity<Long, ZonedDateTime> imp
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+
+    @OneToMany(mappedBy = "shoppingCart", fetch = FetchType.LAZY)
+    private List<ShoppingCartItem> shoppingCartItems;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ShoppingCart that = (ShoppingCart) o;
+        return status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), status);
+    }
 }

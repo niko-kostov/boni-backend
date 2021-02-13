@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -21,4 +22,18 @@ public class Location extends BaseEntity<Long> {
 
     @OneToOne(mappedBy = "location")
     private Address address;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Location location = (Location) o;
+        return Float.compare(location.longitude, longitude) == 0 && Float.compare(location.latitude, latitude) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), longitude, latitude);
+    }
 }

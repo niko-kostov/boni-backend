@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -30,5 +31,19 @@ public class Role extends BaseTimeAuditedEntity<Long, ZonedDateTime> implements 
     @JsonIgnore
     @OneToMany(mappedBy = "role")
     private Set<User> users;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Role role = (Role) o;
+        return active == role.active && deleted == role.deleted && name == role.name;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, active, deleted);
+    }
 }
 
