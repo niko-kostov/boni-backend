@@ -1,20 +1,15 @@
 package com.project.boni.service.Impl;
 
 import com.project.boni.model.Category;
-import com.project.boni.model.Item;
 import com.project.boni.model.Menu;
 import com.project.boni.model.dto.EditCategoryDto;
 import com.project.boni.model.dto.SaveCategoryDto;
 import com.project.boni.model.exceptions.CategoryNotFoundException;
 import com.project.boni.model.exceptions.MenuNotExistException;
-import com.project.boni.repository.CategoryRepository;
-import com.project.boni.repository.ItemPriceRepository;
-import com.project.boni.repository.ItemRepository;
-import com.project.boni.repository.MenuRepository;
+import com.project.boni.repository.*;
 import com.project.boni.service.CategoryService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -24,12 +19,14 @@ public class CategoryServiceImpl implements CategoryService {
     private final ItemRepository itemRepository;
     private final ItemPriceRepository itemPriceRepository;
     private final MenuRepository menuRepository;
+    private final ShoppingCartItemRepository shoppingCartItemRepository;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, ItemRepository itemRepository, ItemPriceRepository itemPriceRepository, MenuRepository menuRepository) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, ItemRepository itemRepository, ItemPriceRepository itemPriceRepository, MenuRepository menuRepository, ShoppingCartItemRepository shoppingCartItemRepository) {
         this.categoryRepository = categoryRepository;
         this.itemRepository = itemRepository;
         this.itemPriceRepository = itemPriceRepository;
         this.menuRepository = menuRepository;
+        this.shoppingCartItemRepository = shoppingCartItemRepository;
     }
 
     @Override
@@ -45,6 +42,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category deleteById(Long id) {
         Category deletedCategory = this.categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
+        deletedCategory.getItems().forEach(item -> item.getItemPrices()
+                .forEach(itemPrice -> this.shoppingCartItemRepository
+                        .deleteAll(this.shoppingCartItemRepository.findByIdItemPriceId(itemPrice.getId()))));
         deletedCategory.getItems().forEach(item -> this.itemPriceRepository.deleteAll(item.getItemPrices()));
         this.itemRepository.deleteAll(deletedCategory.getItems());
         this.categoryRepository.deleteById(id);
