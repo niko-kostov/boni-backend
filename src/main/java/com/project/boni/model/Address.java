@@ -1,17 +1,19 @@
 package com.project.boni.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.boni.model.baseClass.BaseEntity;
 import com.project.boni.model.enums.Municipality;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Data
 @Table(name = "address_user")
-public class Address extends BaseEntity<Long> {
+public class Address extends BaseEntity<Long> implements Serializable {
 
     @Column(name = "street")
     private String street;
@@ -29,6 +31,7 @@ public class Address extends BaseEntity<Long> {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @Override
