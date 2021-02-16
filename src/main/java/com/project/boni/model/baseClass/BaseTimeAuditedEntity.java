@@ -2,11 +2,13 @@ package com.project.boni.model.baseClass;
 
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
 @Data
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeAuditedEntity<U, T> {
 
     @Id

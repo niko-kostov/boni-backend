@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.boni.model.baseClass.BaseEntity;
 import com.project.boni.model.baseClass.BaseTimeAuditedEntity;
 import lombok.Data;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -17,6 +15,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "menu")
+@EntityListeners(AuditingEntityListener.class)
 public class Menu extends BaseTimeAuditedEntity<Long, ZonedDateTime> implements Serializable {
 
     @Column(name = "menu_name")
