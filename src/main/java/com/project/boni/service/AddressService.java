@@ -6,6 +6,7 @@ import com.project.boni.model.Location;
 import com.project.boni.model.User;
 import com.project.boni.model.dto.EditAddressDto;
 import com.project.boni.model.dto.EditCategoryDto;
+import com.project.boni.model.dto.GetAddressDto;
 import com.project.boni.model.dto.SaveAddressDto;
 import com.project.boni.model.enums.Municipality;
 
@@ -24,4 +25,6 @@ public interface AddressService {
     Address edit(EditAddressDto editAddressDto);
 
     Address add(SaveAddressDto saveAddressDto);
+
+    List<GetAddressDto> getAllAddressesForUser(String email);
 }

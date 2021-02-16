@@ -10,13 +10,10 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EditAddressDto implements Serializable {
-    private Long addressId;
+public class GetAddressDto implements Serializable {
     private String street;
+    private Long addressId;
     private String number;
     private Municipality municipality;
-    private float longitude;
-    private float latitude;
-    private Long locationId;
-    private String email;
+    private GetLocationDto locationDto;
 }

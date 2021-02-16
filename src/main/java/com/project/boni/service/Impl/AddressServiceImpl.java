@@ -4,16 +4,20 @@ import com.project.boni.model.Address;
 import com.project.boni.model.Location;
 import com.project.boni.model.User;
 import com.project.boni.model.dto.EditAddressDto;
+import com.project.boni.model.dto.GetAddressDto;
 import com.project.boni.model.dto.SaveAddressDto;
 import com.project.boni.model.exceptions.AddressNotFoundException;
+import com.project.boni.model.exceptions.LocationNotFoundException;
 import com.project.boni.model.exceptions.UserNotFoundException;
 import com.project.boni.repository.AddressRepository;
 import com.project.boni.repository.LocationRepository;
 import com.project.boni.repository.UserRepository;
 import com.project.boni.service.AddressService;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -54,20 +58,26 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Address edit(EditAddressDto editAddressDto) {
-       // Optional<User> user=this.userRepository.findById(editAddressDto.getEmail());
-        Address address=this.findById(editAddressDto.getId());
+        // Optional<User> user=this.userRepository.findById(editAddressDto.getEmail());
+        Address address = this.findById(editAddressDto.getAddressId());
         address.setStreet(editAddressDto.getStreet());
         address.setNumber(editAddressDto.getNumber());
         address.setMunicipality(editAddressDto.getMunicipality());
-        address.setLocation(editAddressDto.getLocation());
+
+        Location location = this.locationRepository.findById(editAddressDto.getLocationId())
+                .orElseThrow(() -> new LocationNotFoundException(editAddressDto.getLocationId()));
+        location.setLatitude(editAddressDto.getLatitude());
+        location.setLongitude(editAddressDto.getLongitude());
+        this.locationRepository.save(location);
         return this.addressRepository.save(address);
     }
 
-    public Address add(SaveAddressDto saveAddressDto)
-    {
-        Address address=new Address();
-        Location location=new Location();
-        User user=this.userRepository.findById(saveAddressDto.getEmail()).orElseThrow(()->new UserNotFoundException(saveAddressDto.getEmail()));
+    public Address add(SaveAddressDto saveAddressDto) {
+        Address address = new Address();
+        Location location = new Location();
+        User user = this.userRepository.findById(saveAddressDto.getEmail())
+                .orElseThrow(() -> new UserNotFoundException(saveAddressDto.getEmail()));
+
         location.setLatitude(saveAddressDto.getLatitude());
         location.setLongitude(saveAddressDto.getLongitude());
         address.setStreet(saveAddressDto.getStreet());
@@ -81,5 +91,15 @@ public class AddressServiceImpl implements AddressService {
         return this.addressRepository.save(address);
     }
 
+    @Override
+    public List<GetAddressDto> getAllAddressesForUser(String email) {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.typeMap(Address.class, GetAddressDto.class).addMappings(mapper -> {
+            mapper.map(Address::getLocation, GetAddressDto::setLocationDto);
+        });
 
+        return this.addressRepository.findAll()
+                .stream().filter(address -> address.getUser().getEmail().equals(email))
+                .map(address -> modelMapper.map(address, GetAddressDto.class)).collect(Collectors.toList());
+    }
 }

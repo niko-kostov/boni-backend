@@ -1,12 +1,9 @@
 package com.project.boni.web;
 
 import com.project.boni.model.Address;
-import com.project.boni.model.Category;
-import com.project.boni.model.Location;
 import com.project.boni.model.dto.EditAddressDto;
-import com.project.boni.model.dto.EditCategoryDto;
+import com.project.boni.model.dto.GetAddressDto;
 import com.project.boni.model.dto.SaveAddressDto;
-import com.project.boni.model.dto.SaveCategoryDto;
 import com.project.boni.service.AddressService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -24,25 +21,23 @@ public class AddressController {
     }
 
 
-//    @GetMapping("/{email}")
-//    public List<Address> getAddressesForUser(@PathVariable String email)
-//    {
-//
-//    }
+    @GetMapping("/user/{email}")
+    public List<GetAddressDto> getAddressesForUser(@PathVariable String email) {
+        return this.addressService.getAllAddressesForUser(email);
+    }
 
-    @DeleteMapping("/delete/{id}")
-    public Address deleteAddress(@PathVariable Long id)
-    {
+    @DeleteMapping("/user/{id}")
+    public Address deleteAddress(@PathVariable Long id) {
         return this.addressService.deleteById(id);
     }
 
-    @PostMapping("/edit")
-    public Address editAddress (@RequestBody EditAddressDto editAddressDto){
+    @PatchMapping("/user")
+    public Address editAddress(@RequestBody EditAddressDto editAddressDto) {
         return this.addressService.edit(editAddressDto);
     }
 
-    @PostMapping("/add")
-    public Address addAddress (@RequestBody SaveAddressDto saveAddressDto){
+    @PostMapping("/user")
+    public Address addAddress(@RequestBody SaveAddressDto saveAddressDto) {
         return this.addressService.add(saveAddressDto);
     }
 }
