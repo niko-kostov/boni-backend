@@ -19,6 +19,4 @@ public class SaveItemDto implements Serializable {
     private String description;
 
     private Long categoryId;
-
-    Set<SaveItemPriceDto> saveItemPriceDtoSet;
 }

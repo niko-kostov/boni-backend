@@ -96,22 +96,15 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public Item saveItemFromDto(SaveItemDto saveItemDto) {
+        Category category = this.categoryRepository.findById(saveItemDto.getCategoryId())
+                .orElseThrow(() -> new CategoryNotFoundException(saveItemDto.getCategoryId()));
         Item item = new Item();
         item.setName(saveItemDto.getName());
         item.setItemImage(saveItemDto.getItemImage());
         item.setDescription(saveItemDto.getDescription());
-        Category category = this.categoryRepository.findById(saveItemDto.getCategoryId())
-                .orElseThrow(() -> new CategoryNotFoundException(saveItemDto.getCategoryId()));
         item.setCategory(category);
 
         Set<ItemPrice> itemPrices = new HashSet<>();
-        for (SaveItemPriceDto saveItemPriceDto : saveItemDto.getSaveItemPriceDtoSet()){
-            ItemPrice itemPrice = new ItemPrice();
-            itemPrice.setItem(item);
-            itemPrice.setSize(saveItemPriceDto.getSize());
-            itemPrice.setPrice(saveItemPriceDto.getPrice());
-            itemPrices.add(itemPrice);
-        }
         item.setItemPrices(itemPrices);
         this.itemRepository.save(item);
         this.itemPriceRepository.saveAll(itemPrices);
