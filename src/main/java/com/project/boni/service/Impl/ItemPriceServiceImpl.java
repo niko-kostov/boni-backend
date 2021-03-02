@@ -2,6 +2,7 @@ package com.project.boni.service.Impl;
 
 import com.project.boni.model.Item;
 import com.project.boni.model.ItemPrice;
+import com.project.boni.model.dto.AddItemPriceDto;
 import com.project.boni.model.exceptions.ItemNotFoundException;
 import com.project.boni.model.exceptions.ItemPriceNotFoundException;
 import com.project.boni.repository.ItemPriceRepository;
@@ -41,4 +42,17 @@ public class ItemPriceServiceImpl implements ItemPriceService {
     public List<ItemPrice> findAll() {
         return this.itemPriceRepository.findAll();
     }
+
+    @Override
+    public ItemPrice addItemPrice(AddItemPriceDto addItemPriceDto) {
+        Item item = this.itemRepository.findById(addItemPriceDto.getItemId())
+                .orElseThrow(() -> new ItemNotFoundException(addItemPriceDto.getItemId()));
+
+        ItemPrice itemPrice = new ItemPrice();
+        itemPrice.setItem(item);
+        itemPrice.setPrice(addItemPriceDto.getPrice());
+        itemPrice.setSize(addItemPriceDto.getSize());
+        return this.itemPriceRepository.save(itemPrice);
+    }
+
 }

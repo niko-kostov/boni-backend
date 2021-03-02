@@ -1,6 +1,7 @@
 package com.project.boni.web;
 
 import com.project.boni.model.ItemPrice;
+import com.project.boni.model.dto.AddItemPriceDto;
 import com.project.boni.service.ItemPriceService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -18,5 +19,10 @@ public class ItemPriceController {
     @DeleteMapping("/admin/{id}")
     public ItemPrice deleteItemPrice(@PathVariable Long id){
         return this.itemPriceService.deleteById(id);
+    }
+
+    @PostMapping("/admin")
+    public ItemPrice addItemPrice(@RequestBody AddItemPriceDto addItemPriceDto){
+        return itemPriceService.addItemPrice(addItemPriceDto);
     }
 }
