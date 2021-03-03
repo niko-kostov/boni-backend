@@ -19,10 +19,10 @@ public class Item extends BaseEntity<Long> implements Serializable {
     @Column(name = "item_name")
     private String name;
 
-    @Lob
     //@Type(type = "org.hibernate.type.ImageType")
+    //@Lob
     @Column(name = "item_image")
-    private byte[] itemImage;
+    private String itemImage;
 
     @Column(name = "item_description")
     private String description;
@@ -42,14 +42,12 @@ public class Item extends BaseEntity<Long> implements Serializable {
         if (!super.equals(o)) return false;
         Item item = (Item) o;
         return Objects.equals(name, item.name) &&
-                Arrays.equals(itemImage, item.itemImage) &&
+                Objects.equals(itemImage, item.itemImage) &&
                 Objects.equals(description, item.description);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(super.hashCode(), name, description);
-        result = 31 * result + Arrays.hashCode(itemImage);
-        return result;
+        return Objects.hash(super.hashCode(), name, itemImage, description);
     }
 }
