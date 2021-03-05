@@ -16,11 +16,9 @@ public class EditItemDto implements Serializable {
 
     private String name;
 
-    private byte[] itemImage;
+    private String itemImage;
 
     private String description;
 
     private Long categoryId;
-
-    Set<EditItemPriceDto> editItemPriceDtoSet;
 }

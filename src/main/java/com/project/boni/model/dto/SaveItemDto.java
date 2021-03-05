@@ -14,7 +14,7 @@ public class SaveItemDto implements Serializable {
 
     private String name;
 
-    private byte[] itemImage;
+    private String itemImage;
 
     private String description;
 

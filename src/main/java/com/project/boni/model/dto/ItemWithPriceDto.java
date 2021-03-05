@@ -17,7 +17,7 @@ public class ItemWithPriceDto implements Serializable{
 
     private String name;
 
-    private byte[] itemImage;
+    private String itemImage;
 
     private String description;
 

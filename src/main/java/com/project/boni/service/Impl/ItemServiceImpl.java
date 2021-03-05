@@ -71,25 +71,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional
     public Item edit(EditItemDto editItemDto) {
         Item item = this.findById(editItemDto.getId());
         item.setCategory(this.categoryRepository.findById(editItemDto.getCategoryId()).orElseThrow(() -> new CategoryNotFoundException(editItemDto.getCategoryId())));
         item.setDescription(editItemDto.getDescription());
         item.setItemImage(editItemDto.getItemImage());
         item.setName(editItemDto.getName());
-        Set<ItemPrice> itemPriceSet = new HashSet<>();
 
-        for (EditItemPriceDto editItemPriceDto : editItemDto.getEditItemPriceDtoSet()){
-            ItemPrice itemPrice = this.itemPriceRepository.findById(editItemPriceDto.getId())
-                    .orElseThrow(() ->new ItemPriceNotFoundException(editItemPriceDto.getId()));
-            itemPrice.setPrice(editItemPriceDto.getPrice());
-            itemPrice.setSize(editItemPriceDto.getSize());
-            this.itemPriceRepository.save(itemPrice);
-            itemPriceSet.add(itemPrice);
-        }
-
-        item.setItemPrices(itemPriceSet);
         return this.itemRepository.save(item);
     }
 
