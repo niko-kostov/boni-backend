@@ -2,12 +2,12 @@ package com.project.boni.web;
 
 import com.project.boni.model.ShoppingCart;
 import com.project.boni.model.ShoppingCartItem;
-import com.project.boni.model.dto.AddItemToCartDto;
-import com.project.boni.model.dto.GetShoppingCartDto;
-import com.project.boni.model.dto.PayShoppingCartDto;
+import com.project.boni.model.dto.*;
 import com.project.boni.service.ShoppingCartService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -34,5 +34,13 @@ public class ShoppingCartController {
         return this.shoppingCartService.payShoppingCart(payShoppingCartDto);
     }
 
+    @GetMapping("/user/getOrderHistory/{email}")
+    public List<GetOrderHistoryDto> getOrderHistoryForUser(@PathVariable String email){
+        return this.shoppingCartService.getOrderHistoryForUser(email);
+    }
 
+    @GetMapping("/user/getOrderHistoryDetails/{id}")
+    public List<GetOrderHistoryDetailsDto> getOrderHistoryDetails(@PathVariable Long id){
+        return this.shoppingCartService.getOrderHistoryDetails(id);
+    }
 }

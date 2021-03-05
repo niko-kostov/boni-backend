@@ -1,22 +1,30 @@
 package com.project.boni.service.Impl;
 
-import com.project.boni.model.*;
+import com.project.boni.model.ShoppingCart;
+import com.project.boni.model.ShoppingCartItem;
+import com.project.boni.model.User;
 import com.project.boni.model.baseClass.BaseTimeAuditedEntity;
-import com.project.boni.model.dto.AddItemToCartDto;
+import com.project.boni.model.dto.GetOrderHistoryDetailsDto;
+import com.project.boni.model.dto.GetOrderHistoryDto;
 import com.project.boni.model.dto.GetShoppingCartDto;
 import com.project.boni.model.dto.PayShoppingCartDto;
 import com.project.boni.model.enums.ShoppingCartStatus;
-import com.project.boni.model.exceptions.ItemNotFoundException;
-import com.project.boni.model.exceptions.ItemPriceNotFoundException;
 import com.project.boni.model.exceptions.ShoppingCartNotFoundException;
+import com.project.boni.model.exceptions.ShoppingCartStillActiveException;
 import com.project.boni.model.exceptions.UserNotFoundException;
-import com.project.boni.repository.*;
+import com.project.boni.repository.ItemRepository;
+import com.project.boni.repository.ShoppingCartItemRepository;
+import com.project.boni.repository.ShoppingCartRepository;
+import com.project.boni.repository.UserRepository;
 import com.project.boni.service.ShoppingCartService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
@@ -104,7 +112,44 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ShoppingCart payShoppingCart(PayShoppingCartDto payShoppingCartDto) {
         ShoppingCart shoppingCart = findById(payShoppingCartDto.getShoppingCartId());
         shoppingCart.setStatus(ShoppingCartStatus.FINISHED);
+        shoppingCart.setOrder_payed(ZonedDateTime.now());
         return this.save(shoppingCart);
+    }
+
+    @Override
+    public List<GetOrderHistoryDto> getOrderHistoryForUser(String email) {
+        User user = this.userRepository.findById(email).orElseThrow(() -> new UserNotFoundException(email));
+        List<ShoppingCart> shoppingCarts = this.shoppingCartRepository.findAll().stream()
+                .filter(cart -> cart.getUser().getEmail().equals(email) && cart.getStatus().name().equals("FINISHED")).collect(Collectors.toList());
+
+        List<GetOrderHistoryDto> orderHistoryDtoList = new ArrayList<>();
+        for (ShoppingCart cart : shoppingCarts) {
+            GetOrderHistoryDto getOrderHistoryDto = new GetOrderHistoryDto();
+            getOrderHistoryDto.setId(cart.getId());
+            getOrderHistoryDto.setDatePayed(cart.getOrder_payed());
+            getOrderHistoryDto.setTotalPrice(cart.getShoppingCartItems().stream().mapToDouble(item -> item.getQuantity() * item.getItemPrice().getPrice()).sum());
+            orderHistoryDtoList.add(getOrderHistoryDto);
+        }
+        return orderHistoryDtoList;
+    }
+
+    @Override
+    public List<GetOrderHistoryDetailsDto> getOrderHistoryDetails(Long id) {
+        ShoppingCart shoppingCart = this.shoppingCartRepository.findById(id)
+                .orElseThrow(() -> new ShoppingCartNotFoundException(id));
+        if (!shoppingCart.getStatus().name().equals("FINISHED")) throw new ShoppingCartStillActiveException(id);
+
+        List<GetOrderHistoryDetailsDto> orderHistoryDetailsDtoList = new ArrayList<>();
+        for(ShoppingCartItem shoppingCartItem : shoppingCart.getShoppingCartItems()){
+            GetOrderHistoryDetailsDto orderHistoryDetailsDto = new GetOrderHistoryDetailsDto();
+            orderHistoryDetailsDto.setQuantity(shoppingCartItem.getQuantity());
+            orderHistoryDetailsDto.setItemName(shoppingCartItem.getItemPrice().getItem().getName());
+            orderHistoryDetailsDto.setSize(shoppingCartItem.getItemPrice().getSize());
+            orderHistoryDetailsDto.setItemPrice(shoppingCartItem.getItemPrice().getPrice());
+            orderHistoryDetailsDtoList.add(orderHistoryDetailsDto);
+        }
+
+        return orderHistoryDetailsDtoList;
     }
 
 }

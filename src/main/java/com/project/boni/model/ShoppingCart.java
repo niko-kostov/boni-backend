@@ -25,6 +25,9 @@ public class ShoppingCart extends BaseTimeAuditedEntity<Long, ZonedDateTime> imp
     @JsonIgnore
     private User user;
 
+    @Column(name = "order_payed")
+    private ZonedDateTime order_payed;
+
     @OneToMany(mappedBy = "shoppingCart", fetch = FetchType.LAZY)
     private List<ShoppingCartItem> shoppingCartItems;
 
