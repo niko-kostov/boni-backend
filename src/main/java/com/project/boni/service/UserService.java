@@ -1,6 +1,9 @@
 package com.project.boni.service;
 
 import com.project.boni.model.User;
+import com.project.boni.model.dto.JwtResponseDto;
+import com.project.boni.model.dto.LoginDto;
+import com.project.boni.model.dto.RegisterDto;
 
 import java.util.List;
 
@@ -8,7 +11,7 @@ public interface UserService {
 
     List<User> findAll();
 
-    User findByEmail(String email);
+    JwtResponseDto signInUser(LoginDto loginDto);
 
-    User save(User user);
+    void signUpUser(RegisterDto registerDto);
 }

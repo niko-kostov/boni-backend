@@ -1,17 +1,51 @@
 package com.project.boni.service.Impl;
 
 import com.project.boni.model.User;
+import com.project.boni.model.dto.JwtResponseDto;
+import com.project.boni.model.dto.LoginDto;
+import com.project.boni.model.dto.RegisterDto;
+import com.project.boni.model.enums.ERole;
+import com.project.boni.model.exceptions.UserAlreadyExistsException;
+import com.project.boni.model.exceptions.UserDeletedException;
+import com.project.boni.model.exceptions.UserNotActiveException;
 import com.project.boni.model.exceptions.UserNotFoundException;
+import com.project.boni.repository.RoleRepository;
 import com.project.boni.repository.UserRepository;
+import com.project.boni.security.jwt.JwtUtils;
+import com.project.boni.security.services.UserDetailsImpl;
 import com.project.boni.service.UserService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder,
+                           RoleRepository roleRepository,
+                           AuthenticationManager authenticationManager,
+                           JwtUtils jwtUtils) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -20,12 +54,56 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmail(String email) {
-        return this.userRepository.findById(email).orElseThrow(() -> new UserNotFoundException(email));
+    public JwtResponseDto signInUser(LoginDto loginDto) {
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+
+        User user = userRepository.findById(loginDto.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException(loginDto.getEmail()));
+
+        if (!user.isActive()) {
+            throw new UserNotActiveException(user.getEmail());
+        }
+
+        if (user.isDeleted()) {
+            throw new UserDeletedException(user.getEmail());
+        }
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        JwtResponseDto jwtResponseDto = new JwtResponseDto();
+        jwtResponseDto.setAccessToken(jwt);
+        jwtResponseDto.setEmail(userDetails.getUsername());
+        jwtResponseDto.setFullName(user.getFirstname() + " " + user.getLastname());
+        jwtResponseDto.setRoles(roles);
+
+        return jwtResponseDto;
     }
 
+    @Transactional
     @Override
-    public User save(User user) {
-        return this.userRepository.save(user);
+    public void signUpUser(RegisterDto registerDto) {
+        if (userRepository.findById(registerDto.getEmail()).isPresent()) {
+            throw new UserAlreadyExistsException(registerDto.getEmail());
+        }
+
+        User user = new User();
+        user.setEmail(registerDto.getEmail());
+        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+        user.setPhoneNumber(registerDto.getPhoneNumber());
+        user.setFirstname(registerDto.getFirstName());
+        user.setLastname(registerDto.getLastName());
+        user.setRole(roleRepository.findByName(ERole.ROLE_USER).get());
+        user.setActive(true);
+        user.setDeleted(false);
+
+        userRepository.save(user);
+
     }
 }
