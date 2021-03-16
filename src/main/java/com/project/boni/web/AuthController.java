@@ -1,5 +1,6 @@
 package com.project.boni.web;
 
+import com.project.boni.model.dto.ChangePasswordDto;
 import com.project.boni.model.dto.JwtResponseDto;
 import com.project.boni.model.dto.LoginDto;
 import com.project.boni.model.dto.RegisterDto;
@@ -29,5 +30,11 @@ public class AuthController {
     public ResponseEntity<JwtResponseDto> loginUser(@RequestBody LoginDto loginDto){
         return ResponseEntity.ok()
                 .body(this.userService.signInUser(loginDto));
+    }
+
+    @PatchMapping("/user/changePassword")
+    public HttpStatus changePasswordForUser(@RequestBody ChangePasswordDto changePasswordDto){
+        this.userService.changePasswordForUser(changePasswordDto);
+        return HttpStatus.OK;
     }
 }

@@ -1,14 +1,12 @@
 package com.project.boni.service.Impl;
 
 import com.project.boni.model.User;
+import com.project.boni.model.dto.ChangePasswordDto;
 import com.project.boni.model.dto.JwtResponseDto;
 import com.project.boni.model.dto.LoginDto;
 import com.project.boni.model.dto.RegisterDto;
 import com.project.boni.model.enums.ERole;
-import com.project.boni.model.exceptions.UserAlreadyExistsException;
-import com.project.boni.model.exceptions.UserDeletedException;
-import com.project.boni.model.exceptions.UserNotActiveException;
-import com.project.boni.model.exceptions.UserNotFoundException;
+import com.project.boni.model.exceptions.*;
 import com.project.boni.repository.RoleRepository;
 import com.project.boni.repository.UserRepository;
 import com.project.boni.security.jwt.JwtUtils;
@@ -19,7 +17,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,6 +46,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findById(String email) {
+        return this.userRepository.findById(email)
+                .orElseThrow(() -> new UsernameNotFoundException(email));
+    }
+
+    @Override
     public List<User> findAll() {
         return this.userRepository.findAll();
     }
@@ -58,8 +61,7 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
 
-        User user = userRepository.findById(loginDto.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException(loginDto.getEmail()));
+        User user = this.findById(loginDto.getEmail());
 
         if (!user.isActive()) {
             throw new UserNotActiveException(user.getEmail());
@@ -104,6 +106,21 @@ public class UserServiceImpl implements UserService {
         user.setDeleted(false);
 
         userRepository.save(user);
-
     }
+
+    @Override
+    public void changePasswordForUser(ChangePasswordDto changePasswordDto) {
+        User user = this.findById(changePasswordDto.getEmail());
+
+        if (passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())){
+            user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+        }
+        else {
+            throw new PasswordNotMatchingException(changePasswordDto.getEmail());
+        }
+
+        this.userRepository.save(user);
+    }
+
+
 }
