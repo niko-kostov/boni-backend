@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -13,8 +15,10 @@ import java.util.Set;
 @NoArgsConstructor
 public class ItemWithPriceDto implements Serializable{
 
+    @NotNull
     private Long id;
 
+    @NotBlank
     private String name;
 
     private String itemImage;

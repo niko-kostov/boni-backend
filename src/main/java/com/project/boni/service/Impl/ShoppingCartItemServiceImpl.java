@@ -2,7 +2,7 @@ package com.project.boni.service.Impl;
 
 import com.project.boni.model.*;
 import com.project.boni.model.dto.AddItemToCartDto;
-import com.project.boni.model.dto.IncreaseShoppingCartItemQuantityDto;
+import com.project.boni.model.dto.ChangeShoppingCartItemQuantityDto;
 import com.project.boni.model.exceptions.ItemNotFoundException;
 import com.project.boni.model.exceptions.ItemPriceNotFoundException;
 import com.project.boni.model.exceptions.ShoppingCartItemNotFoundException;
@@ -39,9 +39,9 @@ public class ShoppingCartItemServiceImpl implements ShoppingCartItemService {
     }
 
     @Override
-    public ShoppingCartItem increaseQuantity(IncreaseShoppingCartItemQuantityDto increaseShoppingCartItemQuantityDto) {
-        ShoppingCartItem shoppingCartItem = this.findById(increaseShoppingCartItemQuantityDto.getShoppingCartId(), increaseShoppingCartItemQuantityDto.getItemPriceId());
-        shoppingCartItem.setQuantity(increaseShoppingCartItemQuantityDto.getQuantity());
+    public ShoppingCartItem changeQuantity(ChangeShoppingCartItemQuantityDto changeShoppingCartItemQuantityDto) {
+        ShoppingCartItem shoppingCartItem = this.findById(changeShoppingCartItemQuantityDto.getShoppingCartId(), changeShoppingCartItemQuantityDto.getItemPriceId());
+        shoppingCartItem.setQuantity(changeShoppingCartItemQuantityDto.getQuantity());
         return this.shoppingCartItemRepository.save(shoppingCartItem);
     }
 

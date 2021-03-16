@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -28,6 +30,7 @@ public class ShoppingCartItem implements Serializable {
     private ItemPrice itemPrice;
 
     @Column(name = "quantity")
+    @Positive
     private Integer quantity;
 
     @Override

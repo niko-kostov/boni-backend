@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class GetShoppingCartDto implements Serializable {
 
+    @NotNull
     private Long shoppingCartId;
 
     private List<ShoppingCartItemDto> shoppingCartItemDtoList;

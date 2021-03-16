@@ -2,8 +2,7 @@ package com.project.boni.service;
 
 import com.project.boni.model.ShoppingCartItem;
 import com.project.boni.model.dto.AddItemToCartDto;
-import com.project.boni.model.dto.IncreaseShoppingCartItemQuantityDto;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.project.boni.model.dto.ChangeShoppingCartItemQuantityDto;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ public interface ShoppingCartItemService {
 
     ShoppingCartItem save(ShoppingCartItem shoppingCartItem);
 
-    ShoppingCartItem increaseQuantity(IncreaseShoppingCartItemQuantityDto increaseShoppingCartItemQuantityDto);
+    ShoppingCartItem changeQuantity(ChangeShoppingCartItemQuantityDto changeShoppingCartItemQuantityDto);
 
     ShoppingCartItem findById(Long shoppingCartId, Long itemPriceId);
 

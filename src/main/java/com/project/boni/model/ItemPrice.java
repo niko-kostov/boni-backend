@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -19,6 +20,7 @@ import java.util.Objects;
 public class ItemPrice extends BaseEntity<Long> implements Serializable {
 
     @Column(name = "price")
+    @Positive
     private double price;
 
     @Enumerated(value = EnumType.STRING)

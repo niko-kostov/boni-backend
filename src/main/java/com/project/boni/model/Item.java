@@ -19,8 +19,6 @@ public class Item extends BaseEntity<Long> implements Serializable {
     @Column(name = "item_name")
     private String name;
 
-    //@Type(type = "org.hibernate.type.ImageType")
-    //@Lob
     @Column(name = "item_image")
     private String itemImage;
 

@@ -1,10 +1,8 @@
 package com.project.boni.web;
 
-import com.project.boni.model.ShoppingCart;
 import com.project.boni.model.ShoppingCartItem;
 import com.project.boni.model.dto.AddItemToCartDto;
-import com.project.boni.model.dto.IncreaseShoppingCartItemQuantityDto;
-import com.project.boni.model.dto.PayShoppingCartDto;
+import com.project.boni.model.dto.ChangeShoppingCartItemQuantityDto;
 import com.project.boni.service.ShoppingCartItemService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +18,8 @@ public class ShoppingCartItemController {
     }
 
     @PatchMapping("/user/changeQuantity")
-    public ShoppingCartItem increaseQuantityOfItem(@RequestBody IncreaseShoppingCartItemQuantityDto increaseShoppingCartItemQuantityDto){
-        return this.shoppingCartItemService.increaseQuantity(increaseShoppingCartItemQuantityDto);
+    public ShoppingCartItem increaseQuantityOfItem(@RequestBody ChangeShoppingCartItemQuantityDto changeShoppingCartItemQuantityDto){
+        return this.shoppingCartItemService.changeQuantity(changeShoppingCartItemQuantityDto);
     }
 
     @DeleteMapping("/user/shoppingCart/{shoppingCartId}/itemPrice/{itemPriceId}")

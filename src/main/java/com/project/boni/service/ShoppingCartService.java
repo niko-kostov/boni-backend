@@ -17,7 +17,7 @@ public interface ShoppingCartService {
 
     ShoppingCart createShoppingCartForUser(String email);
 
-//    ShoppingCartItem addItemToCart(AddItemToCartDto addItemToCartDto);
+    ShoppingCartItem addItemToCart(AddItemToCartDto addItemToCartDto);
 
     ShoppingCart payShoppingCart(PayShoppingCartDto payShoppingCartDto);
 
