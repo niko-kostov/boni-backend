@@ -13,6 +13,7 @@ import com.project.boni.service.ShoppingCartService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -102,10 +103,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }*/
 
     @Override
+    @Transactional
     public ShoppingCart payShoppingCart(PayShoppingCartDto payShoppingCartDto) {
         ShoppingCart shoppingCart = findById(payShoppingCartDto.getShoppingCartId());
         shoppingCart.setStatus(ShoppingCartStatus.FINISHED);
         shoppingCart.setOrder_payed(ZonedDateTime.now());
+
+        this.createShoppingCartForUser(shoppingCart.getUser().getEmail());
         return this.save(shoppingCart);
     }
 

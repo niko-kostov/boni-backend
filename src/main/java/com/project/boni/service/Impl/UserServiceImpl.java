@@ -11,6 +11,7 @@ import com.project.boni.repository.RoleRepository;
 import com.project.boni.repository.UserRepository;
 import com.project.boni.security.jwt.JwtUtils;
 import com.project.boni.security.services.UserDetailsImpl;
+import com.project.boni.service.ShoppingCartService;
 import com.project.boni.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,17 +33,20 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final ShoppingCartService shoppingCartService;
 
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder,
                            RoleRepository roleRepository,
                            AuthenticationManager authenticationManager,
-                           JwtUtils jwtUtils) {
+                           JwtUtils jwtUtils,
+                           ShoppingCartService shoppingCartService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
+        this.shoppingCartService = shoppingCartService;
     }
 
     @Override
@@ -79,9 +83,12 @@ public class UserServiceImpl implements UserService {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
+        Long activeShoppingCartForUserId = this.shoppingCartService.getActiveShoppingCart(loginDto.getEmail()).getShoppingCartId();
+
         JwtResponseDto jwtResponseDto = new JwtResponseDto();
         jwtResponseDto.setAccessToken(jwt);
         jwtResponseDto.setEmail(userDetails.getUsername());
+        jwtResponseDto.setActiveShoppingCartId(activeShoppingCartForUserId);
         jwtResponseDto.setFullName(user.getFirstname() + " " + user.getLastname());
         jwtResponseDto.setRoles(roles);
 
