@@ -104,13 +104,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     @Transactional
-    public ShoppingCart payShoppingCart(PayShoppingCartDto payShoppingCartDto) {
+    public GetShoppingCartDto payShoppingCart(PayShoppingCartDto payShoppingCartDto) {
         ShoppingCart shoppingCart = findById(payShoppingCartDto.getShoppingCartId());
         shoppingCart.setStatus(ShoppingCartStatus.FINISHED);
         shoppingCart.setOrder_payed(ZonedDateTime.now());
 
-        this.createShoppingCartForUser(shoppingCart.getUser().getEmail());
-        return this.save(shoppingCart);
+        this.save(shoppingCart);
+        return this.getActiveShoppingCart(shoppingCart.getUser().getEmail());
     }
 
     @Override

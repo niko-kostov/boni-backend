@@ -19,7 +19,7 @@ public interface ShoppingCartService {
 
 //    ShoppingCartItem addItemToCart(AddItemToCartDto addItemToCartDto);
 
-    ShoppingCart payShoppingCart(PayShoppingCartDto payShoppingCartDto);
+    GetShoppingCartDto payShoppingCart(PayShoppingCartDto payShoppingCartDto);
 
     List<GetOrderHistoryDto> getOrderHistoryForUser(String email);
 

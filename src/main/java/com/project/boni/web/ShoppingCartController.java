@@ -30,7 +30,7 @@ public class ShoppingCartController {
     }*/
 
     @PatchMapping("/user/pay")
-    public ShoppingCart payShoppingCart(@RequestBody PayShoppingCartDto payShoppingCartDto){
+    public GetShoppingCartDto payShoppingCart(@RequestBody PayShoppingCartDto payShoppingCartDto){
         return this.shoppingCartService.payShoppingCart(payShoppingCartDto);
     }
 
