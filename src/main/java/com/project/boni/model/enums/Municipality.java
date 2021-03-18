@@ -7,8 +7,6 @@ public enum Municipality {
     GJORCE_PETROV,
     KARPOSH,
     KISELA_VODA,
-    SARAJ,
     CENTAR,
-    CHAIR,
-    SHUTO_ORIZARI
+    CHAIR
 }
