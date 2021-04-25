@@ -10,6 +10,7 @@ import com.project.boni.security.jwt.JwtUtils;
 import com.project.boni.security.services.UserDetailsImpl;
 import com.project.boni.service.ShoppingCartService;
 import com.project.boni.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -141,6 +142,27 @@ public class UserServiceImpl implements UserService {
         user.setProfileImage(changeProfileImageDto.getProfileImage());
 
         this.userRepository.save(user);
+    }
+
+    @Override
+    public EditProfileResponseDto editProfileForUser(EditProfileDto editProfileDto) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        String email = userDetails.getUsername();
+
+        User user = this.findById(email);
+
+        user.setFirstname(editProfileDto.getFirstName());
+        user.setLastname(editProfileDto.getLastName());
+        user.setPhoneNumber(editProfileDto.getPhoneNumber());
+
+        EditProfileResponseDto editProfileResponseDto = new EditProfileResponseDto();
+        editProfileResponseDto.setFullName(editProfileDto.getFirstName() + " " + editProfileDto.getLastName());
+        editProfileResponseDto.setPhoneNumber(editProfileDto.getPhoneNumber());
+
+        this.userRepository.save(user);
+
+        return editProfileResponseDto;
     }
 
 

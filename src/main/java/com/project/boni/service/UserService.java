@@ -18,4 +18,6 @@ public interface UserService {
     void changePasswordForUser(ChangePasswordDto changePasswordDto);
 
     void changeProfileImage(ChangeProfileImageDto changeProfileImageDto);
+
+    EditProfileResponseDto editProfileForUser(EditProfileDto editProfileDto);
 }

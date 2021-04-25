@@ -3,6 +3,7 @@ package com.project.boni.web;
 import com.project.boni.model.dto.*;
 import com.project.boni.service.ShoppingCartService;
 import com.project.boni.service.UserService;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +41,11 @@ public class AuthController {
     public HttpStatus changeImageUrl(@RequestBody ChangeProfileImageDto changeProfileImageDto){
         this.userService.changeProfileImage(changeProfileImageDto);
         return HttpStatus.OK;
+    }
+
+    @PatchMapping("/user/editProfile")
+    public ResponseEntity<EditProfileResponseDto> editProfile(@RequestBody EditProfileDto editProfileDto){
+        return ResponseEntity.ok()
+                .body(this.userService.editProfileForUser(editProfileDto));
     }
 }
