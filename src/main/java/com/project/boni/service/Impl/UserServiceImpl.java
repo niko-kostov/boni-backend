@@ -1,10 +1,7 @@
 package com.project.boni.service.Impl;
 
 import com.project.boni.model.User;
-import com.project.boni.model.dto.ChangePasswordDto;
-import com.project.boni.model.dto.JwtResponseDto;
-import com.project.boni.model.dto.LoginDto;
-import com.project.boni.model.dto.RegisterDto;
+import com.project.boni.model.dto.*;
 import com.project.boni.model.enums.ERole;
 import com.project.boni.model.exceptions.*;
 import com.project.boni.repository.RoleRepository;
@@ -18,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -90,6 +88,8 @@ public class UserServiceImpl implements UserService {
         jwtResponseDto.setEmail(userDetails.getUsername());
         jwtResponseDto.setActiveShoppingCartId(activeShoppingCartForUserId);
         jwtResponseDto.setFullName(user.getFirstname() + " " + user.getLastname());
+        jwtResponseDto.setProfileImage(user.getProfileImage());
+        jwtResponseDto.setPhoneNumber(user.getPhoneNumber());
         jwtResponseDto.setRoles(roles);
 
         return jwtResponseDto;
@@ -108,6 +108,7 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(registerDto.getPhoneNumber());
         user.setFirstname(registerDto.getFirstName());
         user.setLastname(registerDto.getLastName());
+        user.setProfileImage(registerDto.getProfileImage());
         user.setRole(roleRepository.findByName(ERole.ROLE_USER).get());
         user.setActive(true);
         user.setDeleted(false);
@@ -125,6 +126,19 @@ public class UserServiceImpl implements UserService {
         else {
             throw new PasswordNotMatchingException(changePasswordDto.getEmail());
         }
+
+        this.userRepository.save(user);
+    }
+
+    @Override
+    public void changeProfileImage(ChangeProfileImageDto changeProfileImageDto) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        String email = userDetails.getUsername();
+
+        User user = this.findById(email);
+
+        user.setProfileImage(changeProfileImageDto.getProfileImage());
 
         this.userRepository.save(user);
     }

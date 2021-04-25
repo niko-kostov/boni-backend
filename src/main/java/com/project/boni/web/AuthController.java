@@ -1,9 +1,6 @@
 package com.project.boni.web;
 
-import com.project.boni.model.dto.ChangePasswordDto;
-import com.project.boni.model.dto.JwtResponseDto;
-import com.project.boni.model.dto.LoginDto;
-import com.project.boni.model.dto.RegisterDto;
+import com.project.boni.model.dto.*;
 import com.project.boni.service.ShoppingCartService;
 import com.project.boni.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -36,6 +33,12 @@ public class AuthController {
     @PatchMapping("/user/changePassword")
     public HttpStatus changePasswordForUser(@RequestBody ChangePasswordDto changePasswordDto){
         this.userService.changePasswordForUser(changePasswordDto);
+        return HttpStatus.OK;
+    }
+
+    @PatchMapping("/user/changeProfilePicture")
+    public HttpStatus changeImageUrl(@RequestBody ChangeProfileImageDto changeProfileImageDto){
+        this.userService.changeProfileImage(changeProfileImageDto);
         return HttpStatus.OK;
     }
 }
