@@ -24,4 +24,8 @@ public class JwtResponseDto implements Serializable {
     private Long activeShoppingCartId;
 
     private List<String> roles;
+
+    private String phoneNumber;
+
+    private String profileImage;
 }
