@@ -31,11 +31,4 @@ public class EditAddressDto implements Serializable {
 
     @NotNull
     private float latitude;
-
-    @NotNull
-    private Long locationId;
-
-    @Email
-    @NotNull
-    private String email;
 }

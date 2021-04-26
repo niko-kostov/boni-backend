@@ -8,5 +8,6 @@ public enum Municipality {
     KARPOSH,
     KISELA_VODA,
     CENTAR,
-    CHAIR
+    CHAIR,
+    CHENTO
 }

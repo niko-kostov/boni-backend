@@ -41,8 +41,8 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Address deleteById(Long id) {
         Address deleteAddress = this.addressRepository.findById(id).orElseThrow(() -> new AddressNotFoundException(id));
-        this.locationRepository.delete(deleteAddress.getLocation());
         this.addressRepository.deleteById(id);
+        this.locationRepository.delete(deleteAddress.getLocation());
         return deleteAddress;
     }
 
@@ -57,22 +57,27 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Address edit(EditAddressDto editAddressDto) {
-        // Optional<User> user=this.userRepository.findById(editAddressDto.getEmail());
+    public GetAddressDto edit(EditAddressDto editAddressDto) {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.typeMap(Address.class, GetAddressDto.class).addMappings(mapper -> {
+            mapper.map(Address::getLocation, GetAddressDto::setLocationDto);
+        });
+
         Address address = this.findById(editAddressDto.getAddressId());
         address.setStreet(editAddressDto.getStreet());
         address.setNumber(editAddressDto.getNumber());
         address.setMunicipality(editAddressDto.getMunicipality());
-
-        Location location = this.locationRepository.findById(editAddressDto.getLocationId())
-                .orElseThrow(() -> new LocationNotFoundException(editAddressDto.getLocationId()));
-        location.setLatitude(editAddressDto.getLatitude());
-        location.setLongitude(editAddressDto.getLongitude());
-        this.locationRepository.save(location);
-        return this.addressRepository.save(address);
+        address.getLocation().setLongitude(editAddressDto.getLongitude());
+        address.getLocation().setLatitude(editAddressDto.getLatitude());
+        return modelMapper.map(this.addressRepository.save(address), GetAddressDto.class);
     }
 
-    public Address add(SaveAddressDto saveAddressDto) {
+    public GetAddressDto add(SaveAddressDto saveAddressDto) {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.typeMap(Address.class, GetAddressDto.class).addMappings(mapper -> {
+            mapper.map(Address::getLocation, GetAddressDto::setLocationDto);
+        });
+
         Address address = new Address();
         Location location = new Location();
         User user = this.userRepository.findById(saveAddressDto.getEmail())
@@ -88,7 +93,7 @@ public class AddressServiceImpl implements AddressService {
         location.setAddress(address);
         address.setUser(user);
         this.locationRepository.save(location);
-        return this.addressRepository.save(address);
+        return modelMapper.map(this.addressRepository.save(address), GetAddressDto.class);
     }
 
     @Override

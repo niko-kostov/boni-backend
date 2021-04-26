@@ -32,12 +32,12 @@ public class AddressController {
     }
 
     @PatchMapping("/user")
-    public Address editAddress(@RequestBody EditAddressDto editAddressDto) {
+    public GetAddressDto editAddress(@RequestBody EditAddressDto editAddressDto) {
         return this.addressService.edit(editAddressDto);
     }
 
     @PostMapping("/user")
-    public Address addAddress(@RequestBody SaveAddressDto saveAddressDto) {
+    public GetAddressDto addAddress(@RequestBody SaveAddressDto saveAddressDto) {
         return this.addressService.add(saveAddressDto);
     }
 }

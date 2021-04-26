@@ -22,9 +22,9 @@ public interface AddressService {
 
     List<Address> findAll();
 
-    Address edit(EditAddressDto editAddressDto);
+    GetAddressDto edit(EditAddressDto editAddressDto);
 
-    Address add(SaveAddressDto saveAddressDto);
+    GetAddressDto add(SaveAddressDto saveAddressDto);
 
     List<GetAddressDto> getAllAddressesForUser(String email);
 }

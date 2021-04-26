@@ -21,9 +21,9 @@ public class SaveAddressDto implements Serializable {
     private String street;
 
     @NotBlank
-    private String number ;
+    private String number;
 
-    private Municipality municipality ;
+    private Municipality municipality;
 
     private float longitude;
 
